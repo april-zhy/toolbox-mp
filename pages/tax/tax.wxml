@@ -1,0 +1,5 @@
+<view class="stub">
+  <view class="stub-icon">⏳</view>
+  <view class="stub-title">个税计算器</view>
+  <view class="stub-text">待从旧项目移植（开发方案 Step 0）</view>
+</view>

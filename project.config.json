@@ -1,0 +1,26 @@
+{
+  "compileType": "miniprogram",
+  "appid": "wx5636f39348d618cc",
+  "projectname": "toolbox-mp",
+  "setting": {
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "urlCheck": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "libVersion": "3.17.4",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}

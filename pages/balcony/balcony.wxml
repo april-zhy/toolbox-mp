@@ -1,0 +1,18 @@
+<view class="page">
+  <view class="build">
+    <view class="build-icon">🔧</view>
+    <view class="build-title">阳台架计算器</view>
+    <view class="build-tag">V1 开发中</view>
+  </view>
+
+  <view class="block">
+    <view class="block-title">它算什么</view>
+    <view class="feature" wx:for="{{features}}" wx:key="*this">· {{item}}</view>
+  </view>
+
+  <view class="block">
+    <view class="block-title">实战验证案例</view>
+    <view class="example">{{example}}</view>
+    <view class="example-note">4 个立柱位 · 前后双排 8 根 · 管径 25mm</view>
+  </view>
+</view>

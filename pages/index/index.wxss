@@ -1,0 +1,64 @@
+.page {
+  padding: 40rpx 32rpx;
+}
+
+.header {
+  margin-bottom: 40rpx;
+}
+
+.title {
+  font-size: 44rpx;
+  font-weight: 600;
+}
+
+.subtitle {
+  margin-top: 8rpx;
+  color: #999;
+  font-size: 26rpx;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24rpx;
+}
+
+.card {
+  position: relative;
+  width: calc(50% - 12rpx);
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 32rpx 28rpx;
+}
+
+.card:active {
+  background: #f0f2fa;
+}
+
+.card-icon {
+  font-size: 52rpx;
+}
+
+.card-title {
+  margin-top: 16rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.card-desc {
+  margin-top: 8rpx;
+  color: #999;
+  font-size: 24rpx;
+}
+
+.card-badge {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  font-size: 20rpx;
+  color: #4a6cf7;
+  background: #eef1fd;
+  border-radius: 8rpx;
+  padding: 4rpx 12rpx;
+}
