@@ -1,0 +1,138 @@
+<view class="page">
+  <view class="section">
+    <view class="section-title">基础尺寸（mm）</view>
+
+    <view class="form-item">
+      <text class="label">墙内空宽</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.nicheWidth}}" bindinput="onInput" data-field="nicheWidth" placeholder="如 1775" />
+        <text class="unit">mm</text>
+      </view>
+    </view>
+    <view class="form-hint">列数自动算：总宽 = 内空 − 2×30，一列最长不超过 1m</view>
+
+    <view class="form-item">
+      <text class="label">竖管净长</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.postLength}}" bindinput="onInput" data-field="postLength" placeholder="如 2000" />
+        <text class="unit">mm</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">净深</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.netDepth}}" bindinput="onInput" data-field="netDepth" placeholder="如 550" />
+        <text class="unit">mm</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">帘子余量</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.curtainGap}}" bindinput="onInput" data-field="curtainGap" placeholder="如 50" />
+        <text class="unit">mm</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">分区与层数（共 {{columns.length}} 列）</view>
+
+    <view class="form-hint plain">顶板承重杆固定 5 根/列（= 台面不能挂衣）+ 顶部通长挂衣杆固定 1 根/列（离地固定 1840mm，二十改；原 1949 贴顶口径作废）：固定值不占层数、不走表单；承重杆从里往外 a~e，通长口径 = 区净宽 − 42</view>
+
+    <view class="col-card" wx:for="{{columns}}" wx:key="id">
+      <view class="col-title">第 {{index + 1}} 列{{result ? ' · 下层 ' + result.zoneLevels[index] + ' 层杆' : ''}}</view>
+      <view class="form-item">
+        <text class="label">区净宽</text>
+        <view class="input-wrap">
+          <input type="digit" value="{{item.width}}" bindinput="onColInput" data-index="{{index}}" data-field="width" placeholder="默认均分，可手调" />
+          <text class="unit">mm</text>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="label">独立层</text>
+        <view class="input-wrap">
+          <input type="number" value="{{item.independent}}" bindinput="onColInput" data-index="{{index}}" data-field="independent" placeholder="错层独立的层数" />
+          <text class="unit">层</text>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="label">台面</text>
+        <view class="input-wrap">
+          <input type="number" value="{{item.counter}}" bindinput="onColInput" data-index="{{index}}" data-field="counter" placeholder="0 ~ 档数" />
+          <text class="unit">块</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-hint plain">区净宽均分默认，改一列其余列自动均摊补齐（合计恒 = 总宽 − 竖管）；台面每列最多 = 短侧杆档数（竖管 2000 → 2 块、≥2400 → 4 块），只能架在档位上、从最底档往上（a 两夹夹侧杆 + b 三夹套竖杆）——十八改：层板入口已下线，搁板用台面</view>
+    <view class="form-hint plain">连接件口径已锁定不可改：每侧预留 30 · 短侧杆 260 · 两夹/三字夹占位 25 · 一字夹 17 · 顶轨间隙 26</view>
+  </view>
+
+  <view class="error-bar" wx:if="{{error}}">{{error}}</view>
+
+  <block wx:if="{{result}}">
+    <view class="section result">
+      <view class="headline">
+        <view class="hl-item">
+          <text class="hl-value">{{result.frameWidth}}</text>
+          <text class="hl-label">框架总宽 mm</text>
+        </view>
+        <view class="hl-item">
+          <text class="hl-value">{{result.totalHeight}}</text>
+          <text class="hl-label">总高 mm</text>
+        </view>
+        <view class="hl-item">
+          <text class="hl-value">{{result.totalDepth}}</text>
+          <text class="hl-label">总深 mm</text>
+        </view>
+      </view>
+      <view class="plan-line">内空 − 2×30 = {{result.targetWidth}} · 分区合计 + {{result.posts}}×25 = {{result.frameWidth}}（差值 ≤10 即可）</view>
+
+      <view class="block-title">立体示意图</view>
+      <canvas type="2d" id="cvIso" class="cv cv-iso"></canvas>
+      <view class="block-title">正视图</view>
+      <canvas type="2d" id="cvFront" class="cv cv-front"></canvas>
+      <view class="block-title">侧视图</view>
+      <canvas type="2d" id="cvSide" class="cv cv-side"></canvas>
+      <button class="save-btn" bindtap="saveImage">保存 3 张示意图到相册</button>
+
+      <view class="section-title">管材下料单（按长度合并）</view>
+      <view class="line-item" wx:for="{{result.mergedCuts}}" wx:key="len">
+        <view class="part-left">
+          <text class="line-label"><text class="em">{{item.len}}</text> mm</text>
+          <text class="part-usage">{{item.names}} ，共 {{item.count}} 根</text>
+        </view>
+        <text class="line-value"><text class="em">{{item.count}}</text> 根</text>
+      </view>
+      <view class="warn-bar">全部宽向杆统一下料 = 区净宽 − 42（同列只切一种长度，±10 容差宜长不宜短）；1775 实例：左统一 735、右统一 810</view>
+
+      <view class="section-title">切割方案（原管 6000mm / 根）</view>
+      <view class="line-item" wx:for="{{result.cuttingPlan}}" wx:key="no">
+        <view class="part-left">
+          <text class="line-label">第 {{item.no}} 根</text>
+          <text class="part-usage">{{item.desc}}</text>
+        </view>
+        <text class="line-value">余 <text class="em">{{item.remain}}</text> mm</text>
+      </view>
+      <button class="save-btn" bindtap="copyPlan">复制切割方案</button>
+
+      <view class="block-title">配件清单（× 数量）</view>
+      <view class="line-item" wx:for="{{result.parts}}" wx:key="label">
+        <view class="part-left">
+          <text class="line-label">{{item.label}}</text>
+          <text class="part-usage">{{item.usage}}</text>
+        </view>
+        <text class="line-value"><text class="em">{{item.count}}</text> 个</text>
+      </view>
+
+      <view class="warn-bar" wx:for="{{result.warnings}}" wx:key="*this">{{item}}</view>
+    </view>
+  </block>
+
+  <view class="section tip-card">
+    <view class="tip-title">📏 实战口径（1775 真实案例锚定）</view>
+    <view class="tip-text">竖管落地不打孔，顶部{{form.netDepth}}长侧杆两夹压顶（总高 = 竖管 + 51）+ 5 根顶板承重杆井格托板，中部短侧杆法兰上墙（离地 30/100cm，竖管 ≥2.4m 升四档 30/100/170/230cm），前方留 {{form.curtainGap}} 装帘子。全部宽向杆统一下料 = 区净宽 − 42（同列一种长度）。台面 = 短侧杆档位处前后 2 杆（a 两夹夹侧杆 + b 三夹套竖杆，同一根侧杆，每列最多 = 档数）。挂衣后整体自稳，壁厚买 1.5 以上。</view>
+  </view>
+</view>

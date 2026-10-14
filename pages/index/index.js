@@ -20,6 +20,13 @@ Page({
         path: '/pages/balcony/balcony',
         badge: '新',
       },
+      {
+        icon: '🧥',
+        title: '衣柜计算器',
+        desc: '不锈钢管衣柜 · 下料图',
+        path: '/pages/wardrobe/wardrobe',
+        badge: '新',
+      },
     ],
   },
   onTapTool(e) {

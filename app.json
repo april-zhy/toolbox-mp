@@ -3,7 +3,8 @@
     "pages/index/index",
     "pages/tax/tax",
     "pages/mortgage/mortgage",
-    "pages/balcony/balcony"
+    "pages/balcony/balcony",
+    "pages/wardrobe/wardrobe"
   ],
   "window": {
     "navigationBarTextStyle": "white",

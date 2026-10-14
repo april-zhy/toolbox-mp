@@ -1,6 +1,7 @@
-// 个税计算器 —— 自老项目移植（D:\Work\ISD_NEW\tools\pages\tax\tax.vue，计算逻辑照搬）
-// 差异：v-model 改 bindinput；结果显示 toFixed 移到 JS 侧（WXML 插值不支持方法调用）
-const { calcTax, calcAnnualBonusTax } = require('../../utils/tax.js')
+// 个税计算器 —— 自老项目移植（D:\Work\ISD_NEW\tools\pages\tax\tax.vue）
+// 差异：① v-model 改 bindinput，toFixed 移到 JS 侧；② 月度工资改用月度税率表
+//（老版误套年度税率表，税额偏低，修正说明见 utils/tax.js calcMonthlySalaryTax）
+const { calcMonthlySalaryTax, calcAnnualBonusTax } = require('../../utils/tax.js')
 
 // 专项附加扣除快捷项（与老版一致：点击自动累加进"专项附加扣除"输入框）
 const DEDUCTION_PRESETS = [
@@ -58,19 +59,17 @@ Page({
       return
     }
 
-    const monthIncome = salary + subsidy
-    const monthTaxable = monthIncome - insurance - additional - 5000
-    const taxResult = calcTax(Math.ceil(monthTaxable))
+    const r = calcMonthlySalaryTax(salary, insurance, additional, subsidy)
 
     this.setData({
       result: {
-        salary: monthIncome.toFixed(2),
+        salary: r.monthIncome.toFixed(2),
         insurance: insurance.toFixed(2),
         additional: additional.toFixed(2),
-        taxable: Math.max(0, monthTaxable).toFixed(2),
-        taxRate: (taxResult.rate * 100).toFixed(0),
-        tax: Math.max(0, taxResult.tax).toFixed(2),
-        afterTax: (monthIncome - Math.max(0, taxResult.tax) - insurance).toFixed(2),
+        taxable: r.taxable.toFixed(2),
+        taxRate: (r.rate * 100).toFixed(0),
+        tax: r.tax.toFixed(2),
+        afterTax: r.afterTax.toFixed(2),
       },
       bonusResult: this.calcBonus(),
     })

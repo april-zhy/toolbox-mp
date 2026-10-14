@@ -71,4 +71,34 @@ function calcAnnualBonusTax(annualBonus) {
   }
 }
 
-module.exports = { calcTax, calcAnnualBonusTax }
+/**
+ * 月度工资个税（月均简化估算法）—— 页面公式，含对老版 bug 的修正
+ *
+ * 老版 bug（2026-10-14 移植时发现并修正）：单月应纳税所得额套了年度税率表，
+ * 速算扣除按全年额度扣（如 10% 档扣 2520），且 ≤36000 一律 3% —— 税额显著偏低
+ * （例：月薪 15000 无扣除，老版 300 元/月，正确 790 元/月）。
+ * 正确口径：单月应纳税所得额套月度税率表（速算扣除 = 年度 ÷ 12，2520/12=210）；
+ * 收入恒定时与累计预扣法的全年月均完全一致。
+ * 照搬的老函数 calcTax / calcAnnualBonusTax（年终奖用月度表）保持原样未动。
+ *
+ * @param {number} salary 税前月薪
+ * @param {number} insurance 五险一金个人部分
+ * @param {number} additional 专项附加扣除
+ * @param {number} subsidy 补贴（计税）
+ * @returns {{ monthIncome, taxable, tax, rate, afterTax }}
+ */
+function calcMonthlySalaryTax(salary, insurance, additional, subsidy) {
+  const monthIncome = salary + subsidy
+  const monthTaxable = monthIncome - insurance - additional - 5000
+  const res = calcTax(Math.ceil(monthTaxable), true)
+  const tax = Math.max(0, res.tax)
+  return {
+    monthIncome,
+    taxable: Math.max(0, monthTaxable),
+    tax,
+    rate: res.rate,
+    afterTax: monthIncome - tax - insurance,
+  }
+}
+
+module.exports = { calcTax, calcAnnualBonusTax, calcMonthlySalaryTax }

@@ -1,0 +1,238 @@
+/* 衣柜计算器 V2（无层板）—— 结构类复用 balcony/mortgage 页样式，配色 teal 绿 */
+.page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 40rpx;
+}
+
+.section {
+  margin: 20rpx 24rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 24rpx;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.form-item .label {
+  width: 200rpx;
+  font-size: 28rpx;
+  color: #333;
+  flex-shrink: 0;
+}
+
+.input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 0 20rpx;
+  height: 76rpx;
+}
+
+.input-wrap input {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.input-wrap .unit {
+  font-size: 26rpx;
+  color: #999;
+  margin-left: 10rpx;
+}
+
+.form-hint {
+  font-size: 22rpx;
+  color: #999;
+  line-height: 1.6;
+  margin: -8rpx 0 20rpx 200rpx;
+}
+
+.form-hint.plain {
+  margin: 0 0 16rpx;
+}
+
+/* 头部三卡 */
+.headline {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.hl-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hl-value {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #0a9d6c;
+}
+
+.hl-label {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+}
+
+.plan-line {
+  font-size: 22rpx;
+  color: #999;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.error-bar {
+  margin: 0 24rpx 20rpx;
+  background: #fff1f0;
+  color: #cf1322;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+/* 清单行 */
+.block-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #333;
+  margin: 20rpx 0 8rpx;
+}
+
+.line-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.line-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.part-left {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0; /* 十九改：左侧可缩，描述长了自己换行，不挤右侧数量 */
+}
+
+.part-usage {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #999;
+  word-break: break-all;
+}
+
+.line-value {
+  font-size: 26rpx;
+  color: #333;
+  text-align: right;
+  flex-shrink: 0; /* 十九改：数量固定宽，不被用途描述挤占 */
+  min-width: 112rpx;
+  margin-left: 16rpx;
+  white-space: nowrap;
+}
+
+.line-value .em {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+/* 警告条 */
+.warn-bar {
+  margin-top: 16rpx;
+  background: #fffbe6;
+  color: #ad6800;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+/* 示意图：立体 / 正视 / 侧视，一行一张 */
+.cv {
+  width: 100%;
+  background: #fafafa;
+  border-radius: 12rpx;
+}
+
+.cv-iso {
+  height: 1000rpx;
+}
+
+.cv-front {
+  height: 860rpx; /* 八改：下料单移出画布，只留图形 + 尺寸 */
+}
+
+.cv-side {
+  height: 760rpx;
+}
+
+/* 列卡片（列数按总宽自动生成） */
+.col-card {
+  background: #f9f9f9;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx 0;
+  margin-bottom: 20rpx;
+}
+
+.col-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #0a9d6c;
+  margin-bottom: 12rpx;
+}
+
+.save-btn {
+  margin-top: 20rpx;
+  margin-bottom: 28rpx; /* 十九改：跟下方「管材下料单」标题拉开边距 */
+  background: linear-gradient(135deg, #43cea2 0%, #0a9d6c 100%);
+  color: #fff;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+}
+
+.save-btn::after {
+  border: none;
+}
+
+/* 提示卡 */
+.tip-card {
+  background: #f6ffed;
+  border: 2rpx solid #b7eb8f;
+}
+
+.tip-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #389e0d;
+  margin-bottom: 12rpx;
+}
+
+.tip-text {
+  font-size: 26rpx;
+  color: #4b7c38;
+  line-height: 1.8;
+}

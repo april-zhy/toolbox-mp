@@ -11,6 +11,7 @@
 | 个税计算器 | ✅ 已从旧项目移植（`node test/consistency.js` 与老版逐字段一致） |
 | 房贷计算器 | ✅ 已从旧项目移植（同上） |
 | **阳台架计算器** | ✅ V1 完成（表单 + 实时结果 + 方案 A/B + 台上盆提示卡），待真机预览 |
+| **衣柜计算器** | ✅ V1 实战版（锚 1775 真实落地案例：列数自动 ≤1m/列 + 顶层 5 杆井格托顶板 → 下料单 + 管夹清单 + 立体/正视/侧视三图），待真机预览 |
 
 ## 需求与开发方案（权威文档，在 psc 库里）
 
@@ -21,7 +22,7 @@
 
 1. 微信开发者工具 → 导入项目 → 选本目录（AppID 已配好）
 2. 编辑用 VS Code + Claude Code，开发者工具开着同目录实时预览（保存即热更新）
-3. 跑计算内核测试：`node test/run.js`（1300 实战案例回归）；移植一致性核对：`node test/consistency.js`（老项目路径不存在时自动 SKIP）
+3. 跑测试：`node test/run.js`（阳台架内核，1300 实战案例）、`node test/tax.js`（个税月度公式，含 bug 修正锚点）、`node test/wardrobe.js`（衣柜实战内核，1775 真实案例）、`node test/consistency.js`（与老项目计算结果一致性，老路径不存在时自动 SKIP）
 
 ## 目录结构
 
@@ -31,10 +32,14 @@ pages/index/              工具箱首页（卡片入口）
 pages/tax/                个税计算器
 pages/mortgage/           房贷计算器
 pages/balcony/            阳台架计算器（V1）
+pages/wardrobe/           衣柜计算器（竖管立柱式 V1）
 utils/tax.js              个税计算内核（自老项目照搬）
 utils/mortgage.js         房贷计算内核（自老项目照搬）
 utils/balcony.js          阳台架分区内核（纯函数，方案 A/B 共用）
+utils/wardrobe.js         衣柜实战内核（1775 案例锚定：分区下料 + 管夹清单）
 test/run.js               阳台架内核验收测试（1300 实战案例）
+test/tax.js               个税月度公式验收测试
+test/wardrobe.js          衣柜内核验收测试
 test/consistency.js       新老计算结果一致性核对（依赖老项目路径）
 ```
 
