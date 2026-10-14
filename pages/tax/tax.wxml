@@ -1,5 +1,125 @@
-<view class="stub">
-  <view class="stub-icon">⏳</view>
-  <view class="stub-title">个税计算器</view>
-  <view class="stub-text">待从旧项目移植（开发方案 Step 0）</view>
+<view class="page">
+  <view class="section">
+    <view class="section-title">基本信息</view>
+
+    <view class="form-item">
+      <text class="label">税前月薪</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.salary}}" bindinput="onInput" data-field="salary" placeholder="请输入税前月薪" />
+        <text class="unit">元</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">五险一金</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.insurance}}" bindinput="onInput" data-field="insurance" placeholder="个人缴纳部分" />
+        <text class="unit">元</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">专项附加扣除</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.additional}}" bindinput="onInput" data-field="additional" placeholder="子女教育、房贷利息等" />
+        <text class="unit">元</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">补贴</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.subsidy}}" bindinput="onInput" data-field="subsidy" placeholder="餐补、交通补贴等" />
+        <text class="unit">元</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 专项附加扣除快捷选择 -->
+  <view class="section">
+    <view class="section-title">专项附加扣除（点击自动累加）</view>
+    <view class="tag-group">
+      <view
+        class="tag {{item.active ? 'active' : ''}}"
+        wx:for="{{deductionTags}}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        bindtap="toggleDeduction"
+      >{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- 年终奖 -->
+  <view class="section">
+    <view class="section-title">年终奖</view>
+    <view class="form-item">
+      <text class="label">年终奖金额</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.annualBonus}}" bindinput="onInput" data-field="annualBonus" placeholder="留空则不计算" />
+        <text class="unit">元</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="calc-btn" bindtap="calculate">计算</button>
+
+  <!-- 结果 -->
+  <view class="section result" wx:if="{{result}}">
+    <view class="section-title">计算结果</view>
+
+    <view class="result-card highlight">
+      <text class="result-label">到手月薪</text>
+      <text class="result-value">{{result.afterTax}} 元</text>
+    </view>
+
+    <view class="result-grid">
+      <view class="result-card">
+        <text class="result-label">税前月薪</text>
+        <text class="result-value">{{result.salary}}</text>
+      </view>
+      <view class="result-card">
+        <text class="result-label">五险一金</text>
+        <text class="result-value">{{result.insurance}}</text>
+      </view>
+      <view class="result-card">
+        <text class="result-label">应纳税所得额</text>
+        <text class="result-value">{{result.taxable}}</text>
+      </view>
+      <view class="result-card">
+        <text class="result-label">适用税率</text>
+        <text class="result-value">{{result.taxRate}}%</text>
+      </view>
+      <view class="result-card">
+        <text class="result-label">月缴个税</text>
+        <text class="result-value">{{result.tax}}</text>
+      </view>
+      <view class="result-card">
+        <text class="result-label">专项附加扣除</text>
+        <text class="result-value">{{result.additional}}</text>
+      </view>
+    </view>
+
+    <!-- 年终奖结果 -->
+    <view wx:if="{{bonusResult}}" class="bonus-section">
+      <view class="section-title bonus-title">年终奖计算</view>
+      <view class="result-card highlight">
+        <text class="result-label">年终奖到手</text>
+        <text class="result-value">{{bonusResult.afterTax}} 元</text>
+      </view>
+      <view class="result-grid">
+        <view class="result-card">
+          <text class="result-label">年终奖</text>
+          <text class="result-value">{{bonusResult.bonus}}</text>
+        </view>
+        <view class="result-card">
+          <text class="result-label">适用税率</text>
+          <text class="result-value">{{bonusResult.rate}}%</text>
+        </view>
+        <view class="result-card">
+          <text class="result-label">年终奖个税</text>
+          <text class="result-value">{{bonusResult.tax}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
 </view>

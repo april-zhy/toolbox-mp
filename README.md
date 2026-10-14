@@ -8,9 +8,9 @@
 
 | 工具页 | 状态 |
 |---|---|
-| 个税计算器 | 待从旧项目移植（Step 0） |
-| 房贷计算器 | 待从旧项目移植（Step 0） |
-| **阳台架计算器** | V1 开发中（本项目第一个新功能） |
+| 个税计算器 | ✅ 已从旧项目移植（`node test/consistency.js` 与老版逐字段一致） |
+| 房贷计算器 | ✅ 已从旧项目移植（同上） |
+| **阳台架计算器** | ✅ V1 完成（表单 + 实时结果 + 方案 A/B + 台上盆提示卡），待真机预览 |
 
 ## 需求与开发方案（权威文档，在 psc 库里）
 
@@ -21,18 +21,21 @@
 
 1. 微信开发者工具 → 导入项目 → 选本目录（AppID 已配好）
 2. 编辑用 VS Code + Claude Code，开发者工具开着同目录实时预览（保存即热更新）
-3. 跑计算内核测试：`node test/run.js`
+3. 跑计算内核测试：`node test/run.js`（1300 实战案例回归）；移植一致性核对：`node test/consistency.js`（老项目路径不存在时自动 SKIP）
 
 ## 目录结构
 
 ```
 app.{js,json,wxss}        全局
 pages/index/              工具箱首页（卡片入口）
-pages/tax/                个税（待移植）
-pages/mortgage/           房贷（待移植）
+pages/tax/                个税计算器
+pages/mortgage/           房贷计算器
 pages/balcony/            阳台架计算器（V1）
-utils/balcony.js          分区计算内核（纯函数，方案 A/B 共用）
-test/run.js               内核验收测试（1300 实战案例）
+utils/tax.js              个税计算内核（自老项目照搬）
+utils/mortgage.js         房贷计算内核（自老项目照搬）
+utils/balcony.js          阳台架分区内核（纯函数，方案 A/B 共用）
+test/run.js               阳台架内核验收测试（1300 实战案例）
+test/consistency.js       新老计算结果一致性核对（依赖老项目路径）
 ```
 
 ## 开发约定

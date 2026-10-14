@@ -1,18 +1,114 @@
 <view class="page">
-  <view class="build">
-    <view class="build-icon">🔧</view>
-    <view class="build-title">阳台架计算器</view>
-    <view class="build-tag">V1 开发中</view>
+  <view class="section">
+    <view class="section-title">阳台尺寸（mm）</view>
+
+    <view class="form-item">
+      <text class="label">阳台总宽</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.totalWidth}}" bindinput="onInput" data-field="totalWidth" placeholder="如 1300" />
+        <text class="unit">mm</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">包管宽</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.ductWidth}}" bindinput="onInput" data-field="ductWidth" placeholder="水管包管宽度，如 265" />
+        <text class="unit">mm</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">洗衣机宽</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.washerWidth}}" bindinput="onInput" data-field="washerWidth" placeholder="机身宽度，如 600" />
+        <text class="unit">mm</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">两侧余量</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.margin}}" bindinput="onInput" data-field="margin" placeholder="洗衣机放取余量，默认 30" />
+        <text class="unit">mm</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">管径</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.pipeDiameter}}" bindinput="onInput" data-field="pipeDiameter" placeholder="默认 25" />
+        <text class="unit">mm</text>
+      </view>
+    </view>
   </view>
 
-  <view class="block">
-    <view class="block-title">它算什么</view>
-    <view class="feature" wx:for="{{features}}" wx:key="*this">· {{item}}</view>
+  <view class="section">
+    <view class="section-title">结构方案</view>
+    <view class="tab-group">
+      <view class="tab {{plan === 'B' ? 'active' : ''}}" data-plan="B" bindtap="setPlan">B · 角码壁挂</view>
+      <view class="tab {{plan === 'A' ? 'active' : ''}}" data-plan="A" bindtap="setPlan">A · 立管落地</view>
+    </view>
+    <view class="plan-desc">{{planDesc}}</view>
+
+    <view class="form-item delta-item" wx:if="{{plan === 'A'}}">
+      <text class="label">修正量 Δ</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.delta}}" bindinput="onInput" data-field="delta" placeholder="连接件实测，留空按 0 预览" />
+        <text class="unit">mm</text>
+      </view>
+    </view>
   </view>
 
-  <view class="block">
-    <view class="block-title">实战验证案例</view>
-    <view class="example">{{example}}</view>
-    <view class="example-note">4 个立柱位 · 前后双排 8 根 · 管径 25mm</view>
+  <view class="error-bar" wx:if="{{error}}">{{error}}</view>
+
+  <block wx:if="{{result}}">
+    <view class="section result">
+      <view class="section-title">计算结果</view>
+
+      <!-- 1. 分布串：最核心一屏，可截图 -->
+      <view class="dist-card">
+        <text class="dist-label">宽度分布（管 + 净宽 + 管 …）</text>
+        <text class="dist-text" user-select>{{result.distribution}}</text>
+        <text class="dist-total">= {{result.totalWidth}} mm</text>
+      </view>
+
+      <!-- 2. 各分区净宽 -->
+      <view class="zone-grid">
+        <view class="zone-card" wx:for="{{result.zones}}" wx:key="label">
+          <text class="zone-width">{{item.width}}</text>
+          <text class="zone-label">{{item.label}}</text>
+        </view>
+      </view>
+
+      <!-- 3. 立柱 -->
+      <view class="line-item">
+        <text class="line-label">立柱根数</text>
+        <text class="line-value">{{result.postPositions}} 个位置 × 前后双排 = <text class="em">{{result.posts}}</text> 根</text>
+      </view>
+
+      <!-- 4. 管长清单 -->
+      <view class="block-title">管段切割长度（{{plan === 'B' ? '净距' : '净距+Δ'}}）</view>
+      <view class="line-item" wx:for="{{result.pipes}}" wx:key="label">
+        <text class="line-label">{{item.label}}</text>
+        <text class="line-value"><text class="em">{{item.length}}</text> mm</text>
+      </view>
+
+      <!-- 5. 配件清单 -->
+      <view class="line-item">
+        <text class="line-label">{{result.parts.label}}</text>
+        <text class="line-value"><text class="em">{{result.parts.count}}</text>{{result.parts.count === '待实测' ? '' : ' 个'}}</text>
+      </view>
+      <view class="parts-note">{{result.parts.note}}</view>
+
+      <!-- 警告 -->
+      <view class="warn-bar" wx:for="{{result.warnings}}" wx:key="*this">{{item}}</view>
+    </view>
+  </block>
+
+  <!-- 6. 固定提示卡：实战翻车教训 -->
+  <view class="section tip-card">
+    <view class="tip-title">⚠️ 台上盆避坑（实战教训）</view>
+    <view class="tip-text">木板开孔尺寸极易开错——开小放不进、开大撑不住。强烈建议<text class="tip-em">台上盆</text>：台面只需开一个小孔走下水，盆体整个坐在台面上，翻车风险最低。</view>
   </view>
 </view>

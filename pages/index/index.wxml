@@ -14,7 +14,7 @@
       <view class="card-icon">{{item.icon}}</view>
       <view class="card-title">{{item.title}}</view>
       <view class="card-desc">{{item.desc}}</view>
-      <view class="card-badge">{{item.badge}}</view>
+      <view class="card-badge" wx:if="{{item.badge}}">{{item.badge}}</view>
     </view>
   </view>
 </view>

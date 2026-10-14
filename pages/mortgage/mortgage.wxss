@@ -1,22 +1,201 @@
-.stub {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 200rpx;
+/* 自老项目移植：SCSS 嵌套平铺 + 小程序 button 默认样式重置 */
+.page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 40rpx;
 }
 
-.stub-icon {
-  font-size: 72rpx;
+.section {
+  margin: 20rpx 24rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
 }
 
-.stub-title {
-  margin-top: 24rpx;
-  font-size: 34rpx;
+.section-title {
+  font-size: 30rpx;
   font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 24rpx;
 }
 
-.stub-text {
-  margin-top: 12rpx;
-  color: #999;
+.form-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.form-item .label {
+  width: 200rpx;
+  font-size: 28rpx;
+  color: #333;
+  flex-shrink: 0;
+}
+
+.input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 0 20rpx;
+  height: 76rpx;
+}
+
+.input-wrap input {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.input-wrap .unit {
   font-size: 26rpx;
+  color: #999;
+  margin-left: 10rpx;
+}
+
+.tab-group {
+  display: flex;
+  gap: 16rpx;
+  flex: 1;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  color: #666;
+  background: #f5f5f5;
+}
+
+.tab.active {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+}
+
+.quick-years {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.year-tag {
+  flex: 1;
+  text-align: center;
+  padding: 12rpx 0;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: #666;
+  background: #f5f5f5;
+}
+
+.year-tag.active {
+  background: #fff0f3;
+  color: #f5576c;
+  border: 2rpx solid #f5576c;
+}
+
+.calc-btn {
+  margin: 30rpx 24rpx;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+}
+
+.calc-btn::after {
+  border: none;
+}
+
+.result-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.result-card {
+  flex: 1;
+  min-width: calc(50% - 16rpx);
+  box-sizing: border-box;
+  background: #fff5f7;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+
+.result-card.highlight {
+  min-width: 100%;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  margin-bottom: 16rpx;
+}
+
+.result-label {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.result-card.highlight .result-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.result-value {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.result-card.highlight .result-value {
+  color: #fff;
+  font-size: 40rpx;
+}
+
+.detail-section {
+  margin-top: 30rpx;
+  border-top: 2rpx solid #f0f0f0;
+  padding-top: 20rpx;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-title {
+  margin: 0;
+}
+
+.arrow {
+  font-size: 26rpx;
+  color: #f5576c;
+}
+
+.detail-table {
+  margin-top: 20rpx;
+  max-height: 600rpx;
+  overflow-y: auto;
+}
+
+.detail-row {
+  display: flex;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.detail-row.header-row {
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2rpx solid #eee;
+}
+
+.detail-row .col {
+  flex: 1;
+  font-size: 22rpx;
+  color: #666;
+  text-align: center;
 }

@@ -1,5 +1,178 @@
-<view class="stub">
-  <view class="stub-icon">⏳</view>
-  <view class="stub-title">房贷计算器</view>
-  <view class="stub-text">待从旧项目移植（开发方案 Step 0）</view>
+<view class="page">
+  <view class="section">
+    <view class="section-title">贷款信息</view>
+
+    <view class="form-item">
+      <text class="label">贷款类型</text>
+      <view class="tab-group">
+        <view
+          class="tab {{form.loanType === 'commercial' ? 'active' : ''}}"
+          data-type="commercial"
+          bindtap="setLoanType"
+        >商业贷款</view>
+        <view
+          class="tab {{form.loanType === 'fund' ? 'active' : ''}}"
+          data-type="fund"
+          bindtap="setLoanType"
+        >公积金</view>
+        <view
+          class="tab {{form.loanType === 'combined' ? 'active' : ''}}"
+          data-type="combined"
+          bindtap="setLoanType"
+        >组合贷</view>
+      </view>
+    </view>
+
+    <view class="form-item" wx:if="{{form.loanType !== 'combined'}}">
+      <text class="label">贷款金额</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.amount}}" bindinput="onInput" data-field="amount" placeholder="贷款总额" />
+        <text class="unit">万元</text>
+      </view>
+    </view>
+
+    <block wx:else>
+      <view class="form-item">
+        <text class="label">商业贷款</text>
+        <view class="input-wrap">
+          <input type="digit" value="{{form.commercialAmount}}" bindinput="onInput" data-field="commercialAmount" placeholder="商业贷款部分" />
+          <text class="unit">万元</text>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="label">公积金贷款</text>
+        <view class="input-wrap">
+          <input type="digit" value="{{form.fundAmount}}" bindinput="onInput" data-field="fundAmount" placeholder="公积金部分" />
+          <text class="unit">万元</text>
+        </view>
+      </view>
+    </block>
+
+    <view class="form-item">
+      <text class="label">贷款年限</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.years}}" bindinput="onInput" data-field="years" placeholder="贷款年限" />
+        <text class="unit">年</text>
+      </view>
+    </view>
+
+    <view class="quick-years">
+      <view
+        class="year-tag {{form.years == y ? 'active' : ''}}"
+        wx:for="{{quickYears}}"
+        wx:for-item="y"
+        wx:key="*this"
+        data-y="{{y}}"
+        bindtap="setYear"
+      >{{y}}年</view>
+    </view>
+
+    <view class="form-item" wx:if="{{form.loanType !== 'combined'}}">
+      <text class="label">年利率</text>
+      <view class="input-wrap">
+        <input type="digit" value="{{form.rate}}" bindinput="onInput" data-field="rate" placeholder="年利率" />
+        <text class="unit">%</text>
+      </view>
+    </view>
+
+    <block wx:else>
+      <view class="form-item">
+        <text class="label">商业年利率</text>
+        <view class="input-wrap">
+          <input type="digit" value="{{form.commercialRate}}" bindinput="onInput" data-field="commercialRate" placeholder="商业贷款利率" />
+          <text class="unit">%</text>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="label">公积金年利率</text>
+        <view class="input-wrap">
+          <input type="digit" value="{{form.fundRate}}" bindinput="onInput" data-field="fundRate" placeholder="公积金利率" />
+          <text class="unit">%</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="section">
+    <view class="section-title">还款方式</view>
+    <view class="tab-group">
+      <view
+        class="tab {{form.method === 'equal_installment' ? 'active' : ''}}"
+        data-method="equal_installment"
+        bindtap="setMethod"
+      >等额本息</view>
+      <view
+        class="tab {{form.method === 'equal_principal' ? 'active' : ''}}"
+        data-method="equal_principal"
+        bindtap="setMethod"
+      >等额本金</view>
+    </view>
+  </view>
+
+  <button class="calc-btn" bindtap="calculate">开始计算</button>
+
+  <!-- 结果 -->
+  <view class="section result" wx:if="{{result}}">
+    <view class="section-title">计算结果</view>
+
+    <view class="result-card highlight">
+      <text class="result-label">{{form.method === 'equal_installment' ? '每月还款' : '首月还款'}}</text>
+      <text class="result-value">{{result.monthlyPayment}} 元</text>
+    </view>
+
+    <view class="result-grid">
+      <view class="result-card">
+        <text class="result-label">贷款总额</text>
+        <text class="result-value">{{result.totalPrincipal}} 万</text>
+      </view>
+      <view class="result-card">
+        <text class="result-label">还款总额</text>
+        <text class="result-value">{{result.totalPayment}} 万</text>
+      </view>
+      <view class="result-card">
+        <text class="result-label">利息总额</text>
+        <text class="result-value">{{result.totalInterest}} 万</text>
+      </view>
+      <view class="result-card">
+        <text class="result-label">还款月数</text>
+        <text class="result-value">{{result.months}} 月</text>
+      </view>
+    </view>
+
+    <view wx:if="{{form.method === 'equal_principal'}}" class="result-grid">
+      <view class="result-card">
+        <text class="result-label">末月还款</text>
+        <text class="result-value">{{result.lastPayment}} 元</text>
+      </view>
+      <view class="result-card">
+        <text class="result-label">每月递减</text>
+        <text class="result-value">{{result.monthlyDecrease}} 元</text>
+      </view>
+    </view>
+
+    <!-- 还款明细 -->
+    <view class="detail-section">
+      <view class="detail-header" bindtap="toggleDetail">
+        <text class="section-title detail-title">还款明细</text>
+        <text class="arrow">{{showDetail ? '收起' : '展开'}}</text>
+      </view>
+
+      <view wx:if="{{showDetail}}" class="detail-table">
+        <view class="detail-row header-row">
+          <text class="col">期数</text>
+          <text class="col">月供</text>
+          <text class="col">本金</text>
+          <text class="col">利息</text>
+          <text class="col">余额</text>
+        </view>
+        <view class="detail-row" wx:for="{{result.details}}" wx:key="month">
+          <text class="col">{{item.month}}</text>
+          <text class="col">{{item.payment}}</text>
+          <text class="col">{{item.principal}}</text>
+          <text class="col">{{item.interest}}</text>
+          <text class="col">{{item.remaining}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
 </view>
